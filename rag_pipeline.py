@@ -38,7 +38,7 @@ def answer_query(documents, model, query, history=""):
     prompt = ChatPromptTemplate.from_template(custom_prompt_template)
     chain = prompt | model
     response = chain.invoke({"question": query, "context": context, "history": history})
-    return response
+    return response.content
 
 # Step4: Summarization Function
 def summarize_document(documents):
@@ -54,7 +54,7 @@ def summarize_document(documents):
     """
     prompt = ChatPromptTemplate.from_template(summary_prompt)
     chain = prompt | llm_model
-    return chain.invoke({"context": context})
+    return chain.invoke({"context": context}).content
 
 # Step5: Generate Downloadable Report using ReportLab
 def generate_report(user_queries, ai_responses):
