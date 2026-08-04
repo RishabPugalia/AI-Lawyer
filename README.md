@@ -109,7 +109,7 @@ git push origin main
 
 ## 🌐 Deployed Version
 
-Try the live app: **[AI Lawyer](https://lawyeraibyrishab.streamlit.app/)**
+Try the live app: **[AI Lawyer](https://ai-lawyer-by-rishab.streamlit.app/)**
 
 ## 🎯 Future Improvements
 
