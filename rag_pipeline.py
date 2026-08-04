@@ -9,7 +9,7 @@ from reportlab.lib.utils import simpleSplit
 load_dotenv()
 
 # Step1: Setup LLM (Use DeepSeek R1 with Groq)
-llm_model = ChatGroq(model="deepseek-r1-distill-llama-70b")
+llm_model = ChatGroq(model="openai/gpt-oss-120b")
 
 # Step2: Retrieve Docs
 def retrieve_docs(query, file_name):
