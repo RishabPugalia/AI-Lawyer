@@ -69,7 +69,7 @@ if "ai_responses" not in st.session_state:
 st.markdown("""
     <h1 style='text-align: center; color: #4CAF50;'>⚖️ AI Lawyer Chatbot</h1>
     <p style='text-align: center; font-size: 18px; color: #E0E0E0;'>
-        A RAG-based legal reasoning chatbot using DeepSeek and Ollama.
+        A RAG-based legal reasoning chatbot powered by Groq.
         Upload a legal document (PDF) and get AI-powered answers.
     </p>
 """, unsafe_allow_html=True)
