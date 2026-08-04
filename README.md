@@ -1,106 +1,122 @@
-<body>
-    <h1>⚖️ AI Lawyer - RAG with DeepSeek R1</h1>
-     <p>An AI-powered legal chatbot that leverages Retrieval-Augmented Generation (RAG) with <strong>DeepSeek R1</strong> and <strong>Ollama</strong> for advanced legal reasoning.</p>
-    <p>This chatbot is designed to assist users in understanding complex legal documents, retrieving relevant case laws, and providing structured legal insights. By integrating DeepSeek R1, a sophisticated reasoning model, with the RAG framework, AI Lawyer ensures that responses are grounded in factual legal texts, reducing hallucinations and enhancing reliability. The chatbot can process large legal documents, break them down into meaningful sections, and retrieve the most pertinent information to answer user queries accurately.</p>
-    
-   <h2> Features</h2>
-    <ul>
-        <li>📂 Upload and analyze legal documents (PDFs)</li>
-        <li>🔍 Retrieve relevant legal information using FAISS vector database</li>
-        <li>🤖 Answer legal questions using DeepSeek R1 with Groq</li>
-        <li>📜 Summarize legal documents</li>
-        <li>📄 Generate downloadable AI-generated legal reports</li>
-    </ul>
+# ⚖️ AI Lawyer — RAG-Powered Legal Document Assistant
 
+An AI-powered legal chatbot that uses Retrieval-Augmented Generation (RAG) to answer questions grounded in the specific legal documents you upload — not general knowledge, not guesses. Upload a PDF, and every answer is retrieved from and traceable back to that document, which keeps the chatbot reliable for the kind of accuracy legal use cases demand.
 
+## Features
 
-    
-  <h2>📁 Project Structure</h2>
-    <pre>
-    ├── frontend.py          # Streamlit UI for AI Lawyer
-    ├── rag_pipeline.py      # Retrieval-Augmented Generation pipeline
-    ├── vector_database.py   # FAISS-based vector database
-    ├── requirements.txt     # Python dependencies
-    └── README.md            # Project documentation
-    </pre>
-    
-  <h2>🛠️ Technologies Used</h2>
-    <ul>
-        <li><strong>DeepSeek R1</strong> - AI model for complex reasoning</li>
-        <li><strong>Ollama</strong> - Local LLM hosting</li>
-        <li><strong>LangChain</strong> - AI framework for LLM applications</li>
-        <li><strong>Streamlit</strong> - Frontend UI for chatbot</li>
-        <li><strong>FAISS</strong> - Vector search for document retrieval</li>
-        <li><strong>pdfplumber</strong> - PDF document processing</li>
-    </ul>
-    
-   <h2>⚙️ Installation & Setup</h2>
+- 📂 Upload and analyze legal documents (PDF)
+- 🔍 Retrieve relevant passages using a FAISS vector database
+- 🤖 Ask questions and get answers grounded in the uploaded document, powered by Groq
+- 📜 Summarize legal documents
+- 📄 Generate and download an AI-generated report of your Q&A session
 
-<h3>1️⃣ Clone the Repository</h3>
-<pre>
-git clone 
-cd AI-Lawyer-RAG-with-Deepseek
-</pre>
+## Project Structure
 
-<h3>2️⃣ Set Up the Virtual Environment</h3>
-<pre>
+```
+├── frontend.py          # Streamlit UI for AI Lawyer
+├── rag_pipeline.py       # Retrieval-Augmented Generation pipeline (LLM calls, summarization, report generation)
+├── vector_database.py    # Document loading, chunking, embeddings, and FAISS indexing
+├── requirements.txt      # Python dependencies
+└── README.md             # Project documentation
+```
+
+`main.py` is a legacy, unused alternate entrypoint kept for reference — the app's entrypoint is `frontend.py`.
+
+## Technologies Used
+
+- **[Groq](https://groq.com/)** — fast LLM inference (currently `openai/gpt-oss-120b`)
+- **[LangChain](https://www.langchain.com/)** — RAG orchestration
+- **[Streamlit](https://streamlit.io/)** — chatbot UI
+- **[FAISS](https://github.com/facebookresearch/faiss)** — vector similarity search
+- **[Sentence-Transformers](https://www.sbert.net/)** (`all-MiniLM-L6-v2`, via HuggingFace) — document embeddings
+- **[pdfplumber](https://github.com/jsvine/pdfplumber)** — PDF text extraction
+- **[ReportLab](https://www.reportlab.com/)** — downloadable PDF report generation
+
+> Groq periodically retires older model IDs. If you see a `groq.BadRequestError` at runtime, check [Groq's deprecation page](https://console.groq.com/docs/deprecations) and update the model name in `rag_pipeline.py`.
+
+## Installation & Setup
+
+### 1️⃣ Clone the repository
+
+```bash
+git clone <your-repo-url>
+cd ai-lawyer
+```
+
+### 2️⃣ Set up a virtual environment
+
+```bash
 python -m venv venv
-source venv/bin/activate  # On macOS/Linux
-venv\Scripts\activate  # On Windows
-</pre>
+source venv/bin/activate  # macOS/Linux
+venv\Scripts\activate     # Windows
+```
 
-<h3>3️⃣ Install Dependencies</h3>
-<pre>
+### 3️⃣ Install dependencies
+
+```bash
 pip install -r requirements.txt
-</pre>
+```
 
- <h2>Deployment on Streamlit Cloud</h2>
-<h3>1️⃣ Push code to GitHub</h3>
-<pre>
+### 4️⃣ Add your Groq API key
+
+Create a `.env` file in the project root:
+
+```
+GROQ_API_KEY=your-groq-api-key-here
+```
+
+Get a free key at [console.groq.com/keys](https://console.groq.com/keys).
+
+## Usage
+
+```bash
+streamlit run frontend.py
+```
+
+1. Upload a legal document (PDF)
+2. Ask a question, or click **Summarize Document**
+3. Download a PDF report of your session with **Download Report**
+
+## How It Works
+
+1. **Upload PDF** — the document is saved and loaded with `pdfplumber`
+2. **Chunking & embedding** — text is split into overlapping chunks and embedded with `all-MiniLM-L6-v2`
+3. **Vector indexing** — chunks are indexed in a FAISS store, filterable by source file
+4. **Retrieval** — on each question, the most relevant chunks from *that* document are retrieved
+5. **LLM response** — Groq generates an answer grounded only in the retrieved context
+6. **Report generation** — the full Q&A session can be exported as a PDF via ReportLab
+
+## Deployment on Streamlit Community Cloud
+
+### 1️⃣ Push code to GitHub
+
+```bash
 git add .
-git commit -m "Initial commit"
+git commit -m "Deploy AI Lawyer"
 git push origin main
-</pre>
+```
 
-<h3>2️⃣ Deploy on Streamlit</h3>
-<ul>
-  <li>Go to <a href="https://share.streamlit.io/">Streamlit Cloud</a> → Deploy a new app.</li>
-  <li>Set <code>GROQ_API_KEY</code> in Streamlit Secrets.</li>
-  <li>Click <strong>Deploy!</strong> 🎉</li>
-</ul>
+### 2️⃣ Deploy
 
-  <h2>🚀 Usage</h2>
-    <ol>
-        <li>Run the Streamlit application:</li>
-        <pre><code>streamlit run frontend.py</code></pre>
-        <li>Upload a legal document (PDF)</li>
-        <li>Ask legal questions and get AI-powered responses</li>
-        <li>Download AI-generated legal reports</li>
-    </ol>
-    
-   <h2>📜 How It Works</h2>
-    <ol>
-        <li><strong>Upload PDF:</strong> Documents are uploaded and processed.</li>
-        <li><strong>Vector Database:</strong> FAISS indexes the document text.</li>
-        <li><strong>Query Handling:</strong> AI retrieves relevant information.</li>
-        <li><strong>LLM Response:</strong> DeepSeek R1 generates answers.</li>
-        <li><strong>Report Generation:</strong> AI generates a downloadable PDF report.</li>
-    </ol>
+- Go to [Streamlit Community Cloud](https://share.streamlit.io/) → **Deploy a new app**
+- Select your repo, branch `main`, and entrypoint `frontend.py`
+- Under **Advanced settings**, set the Python version to **3.11** or **3.12** (some dependencies, like `faiss-cpu` and `torch`, don't yet publish wheels for the very latest Python release)
+- In the **Secrets** field, add:
+  ```
+  GROQ_API_KEY = "your-groq-api-key-here"
+  ```
+- Click **Deploy**
 
 ## 🌐 Deployed Version
 
-The app is deployed on **Streamlit**! You can check out the live version and explore the analysis on your own:[Streamlit App]().
+Try the live app: **[AI Lawyer](https://lawyeraibyrishab.streamlit.app/)**
 
-    
-  <h2>🎯 Future Improvements</h2>
-    <ul>
-        <li>📝 Add support for multiple document formats (DOCX, TXT)</li>
-        <li>⚡ Improve response speed and accuracy</li>
-        <li>🔗 Integrate legal databases for richer context</li>
-    </ul>
-    
+## 🎯 Future Improvements
 
+- 📝 Support additional document formats (DOCX, TXT)
+- ⚡ Improve response speed and retrieval accuracy
+- 🔗 Integrate external legal databases for richer context
 
----
+## License
 
-
+MIT — see [LICENSE](LICENSE).
